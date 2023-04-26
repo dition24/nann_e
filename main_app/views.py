@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Kid
+from .forms import FeedingForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
@@ -21,7 +22,22 @@ def kids_index(request):
 @login_required
 def kid_detail(request, kid_id):
     kid = Kid.objects.get(id=kid_id)
-    return render(request, 'kids/detail.html', {'kid': kid})
+    feeding_form = FeedingForm()
+    return render(request, 'kids/detail.html', {
+        'kid': kid,
+        'feeding_form': feeding_form,
+    })
+
+@login_required
+def add_feeding(request, kid_id):
+    form = FeedingForm(request.POST)
+    if form.is_valid():
+        new_feeding = form.save(commit=False)
+        new_feeding.kid_id = kid_id
+        new_feeding.save()
+    else:
+        print(form.errors)
+    return redirect('kid_detail', kid_id=kid_id)
 
 def signup(request):
     error_message = ''

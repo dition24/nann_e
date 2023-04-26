@@ -11,6 +11,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <!-- <script defer src="{% static 'js/script.js' %}"></script> -->
     {% block title%}
     <title>Default Title</title>
@@ -25,6 +26,7 @@
                 <li>
                     <a href="{% url 'about' %}">About</a>
                 </li>
+                {% if user.is_authenticated %}
                 <li>
                     <a href="{% url 'kids_index' %}">View All Kids</a>
                 </li>
@@ -32,11 +34,16 @@
                     <a href="{% url 'kid_create' %}">Add a Kid</a>
                 </li>
                 <li>
+                    <a href="{% url 'logout' %}">Log Out</a>
+                </li>
+                {% else %}
+                <li>
                     <a href="{% url 'login' %}">Log In</a>
                 </li>
                 <li>
                     <a href="{% url 'signup' %}">Sign Up</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
        </nav> 
