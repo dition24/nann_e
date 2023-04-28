@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 import uuid
 import boto3
 
-S3_BASE_URL = 'https://s3.us-east-2.amazonaws.com'
+S3_BASE_URL = 'https://s3.us-east-2.amazonaws.com/'
 BUCKET = 'nann-e'
 
 # Create your views here.
@@ -66,11 +66,11 @@ def add_photo(request, kid_id):
         try:
             s3.upload_fileobj(photo_file, BUCKET, key)
             url = f"{S3_BASE_URL}{BUCKET}/{key}"
-            photo = Photo(url=url, kid_id=kid_id)
-            photo.save()
-        except:
-            print('An error occurred uploading file to S3')
-    return redirect('detail', kid_id=kid_id)
+            Photo.objects.create(url=url, kid_id=kid_id)
+        except Exception as error:
+            print('Photo upload failed')
+            print(error)
+    return redirect('kid_detail', kid_id=kid_id)
 
 class KidCreate(LoginRequiredMixin, CreateView):
     model = Kid

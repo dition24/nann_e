@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Kid Detail</h1>
+<h1>{{ kid.name }}</h1>
 
 <div class="row">
     <div class="col s6">
@@ -19,21 +19,21 @@
                 <a href="{% url 'kid_delete' kid.id %}">Delete</a>
             </div>
         </div>
-        {% for photo in cat.photo_set.all %}
-            <img src="{{ photo.url }}" alt="{{ kid.name }}" class="responsive-img card-panel">
-        {% empty %}
-            <div class="card-panel blue-text center-align">No Photos Uploaded</div>
-        {% endfor %}
-        <form 
-            action="{% url 'add_photo' kid.id %}"
-            enctype="multipart/form-data"
-            method="POST"
-            class="card-panel"
-        >
-            {% csrf_token %}
-            <input type="file" name="photo-file">
-            <input class="btn blue" type="submit" value="Upload Photo">
-        </form>
+    {% for photo in kid.photo_set.all %}
+        <img src="{{ photo.url }}" alt="{{ kid.name }}" class="responsive-img card-panel">
+    {% empty %}
+        <div class="card-panel blue-text center-align">No Photos Uploaded</div>
+    {% endfor %}
+    <form 
+        action="{% url 'add_photo' kid.id %}"
+        method="POST"
+        class="card-panel"
+        enctype="multipart/form-data"
+    >
+        {% csrf_token %}
+        <input type="file" name="photo-file">
+        <input class="btn blue" type="submit" value="Upload Photo">
+    </form>
     </div>
     <div class="col s6">
         <form action="{% url 'add_event' kid.id %}" method="POST">
