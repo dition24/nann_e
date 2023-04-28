@@ -1,7 +1,7 @@
 from django.forms import ModelForm
-from .models import Feeding
+from .models import Event
 
-class FeedingForm(ModelForm):
+class EventForm(ModelForm):
     class Meta:
-        model = Feeding
-        fields = ('date', 'time', 'meal')
+        model = Event
+        fields = ('event', 'description', 'date', 'time')

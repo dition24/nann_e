@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect
-from .models import Kid
-from .forms import FeedingForm
+from .models import Kid, Photo
+from .forms import EventForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+import uuid
+import boto3
+
+S3_BASE_URL = 'https://s3.us-east-2.amazonaws.com'
+BUCKET = 'nann-e'
 
 # Create your views here.
 def home(request):
@@ -22,19 +27,19 @@ def kids_index(request):
 @login_required
 def kid_detail(request, kid_id):
     kid = Kid.objects.get(id=kid_id)
-    feeding_form = FeedingForm()
+    event_form = EventForm()
     return render(request, 'kids/detail.html', {
         'kid': kid,
-        'feeding_form': feeding_form,
+        'event_form': event_form,
     })
 
 @login_required
-def add_feeding(request, kid_id):
-    form = FeedingForm(request.POST)
+def add_event(request, kid_id):
+    form = EventForm(request.POST)
     if form.is_valid():
-        new_feeding = form.save(commit=False)
-        new_feeding.kid_id = kid_id
-        new_feeding.save()
+        new_event = form.save(commit=False)
+        new_event.kid_id = kid_id
+        new_event.save()
     else:
         print(form.errors)
     return redirect('kid_detail', kid_id=kid_id)
@@ -52,6 +57,20 @@ def signup(request):
     form = UserCreationForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
+
+def add_photo(request, kid_id):
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            photo = Photo(url=url, kid_id=kid_id)
+            photo.save()
+        except:
+            print('An error occurred uploading file to S3')
+    return redirect('detail', kid_id=kid_id)
 
 class KidCreate(LoginRequiredMixin, CreateView):
     model = Kid

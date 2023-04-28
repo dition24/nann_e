@@ -10,7 +10,8 @@ urlpatterns = [
     path('kids/create/', views.KidCreate.as_view(), name='kid_create'),
     path('kids/<int:pk>/update', views.KidUpdate.as_view(), name='kid_update'),
     path('kids/<int:pk>/delete/', views.KidDelete.as_view(), name='kid_delete'),
-    path('kids/<int:kid_id>/add_feeding/', views.add_feeding, name='add_feeding'),
+    path('kids/<int:kid_id>/add_event/', views.add_event, name='add_event'),
+    path('kids/<int:kid_id>/add_photo/', views.add_photo, name='add_photo'),
 
     path('accounts/signup/', views.signup, name='signup')
 ]

@@ -14,23 +14,32 @@ class Kid(models.Model):
     def get_absolute_url(self):
         return reverse('kid_detail', kwargs={'kid_id': self.id})
     
-class Feeding(models.Model):
-    MEALS = (
-        ('M', 'Milk/Formula'),
-        ('BF', 'Baby Food/Puree'),
-        ('B', 'Breakfast'),
-        ('L', 'Lunch'),
-        ('D', 'Dinner'),
-        ('S', 'Snack'),
+
+class Event(models.Model):
+    EVENTS = (
+        ('A', 'Activity'),
+        ('D', 'Diaper'),
+        ('F', 'Feeding'),
+        ('M', 'Medicine'),
+        ('N', 'Nap'),
+        ('S', 'Sick'),
     )
     
-    date = models.DateField('feeding date')
-    time = models.TimeField('feeding time')
-    meal = models.CharField(max_length=2, choices=MEALS, default=MEALS[5][0], verbose_name='meal type')
+    event = models.CharField(max_length=1, choices=EVENTS, default=EVENTS[0][0], verbose_name='event type')
+    description = models.CharField(max_length=250, verbose_name='event description')
+    date = models.DateField('event date')
+    time = models.TimeField('event time')
     kid = models.ForeignKey(Kid, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.get_meal_display()} on {self.date}"
+        return f"{self.get_event_display()} on {self.date}"
     
     class Meta:
-        ordering = ('-date',)
+        ordering = ('-date', '-time',)
+
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    kid = models.ForeignKey(Kid, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Photo for kid_id: {self.kid_id} @{self.url}"
