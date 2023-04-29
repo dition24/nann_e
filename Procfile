@@ -1,0 +1,1 @@
+web: gunicorn nann_e.wsgi
