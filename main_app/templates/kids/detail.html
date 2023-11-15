@@ -6,17 +6,18 @@
 
 {% block content %}
 <h1>{{ kid.name }}</h1>
+<h4>Age: {{ kid.age }}</h4>
 
+<div class="card-action">
+    <a href="{% url 'kid_update' kid.id %}">Update</a>
+    <a href="{% url 'kid_delete' kid.id %}">Remove</a>
+</div>
 <div class="row">
     <div class="col s6">
         <div class="card">
             <div class="card-content">
-                <span class="card-title">{{ kid.name }}</span>
-                <p>Age: {{ kid.age }}</p>
-            </div>
-            <div class="card-action">
-                <a href="{% url 'kid_update' kid.id %}">Update</a>
-                <a href="{% url 'kid_delete' kid.id %}">Delete</a>
+                <span class="card-title">Notes</span>
+                <p>{{ kid.description }}</p>
             </div>
         </div>
     {% for photo in kid.photo_set.all %}

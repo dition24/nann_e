@@ -74,7 +74,7 @@ def add_photo(request, kid_id):
 
 class KidCreate(LoginRequiredMixin, CreateView):
     model = Kid
-    fields = ('name', 'age')
+    fields = ('name', 'age', 'description')
     template_name = 'kids/kid_form.html'
 
     def form_valid(self, form):
@@ -83,7 +83,7 @@ class KidCreate(LoginRequiredMixin, CreateView):
     
 class KidUpdate(LoginRequiredMixin, UpdateView):
     model = Kid
-    fields = '__all__'
+    fields = ('name', 'age', 'description')
     template_name = 'kids/kid_form.html'
 
 class KidDelete(LoginRequiredMixin, DeleteView):

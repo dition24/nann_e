@@ -80,14 +80,15 @@ WSGI_APPLICATION = 'nann_e.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dition24/nann_e',
-        'USER': os.environ['USER'],
-        'PASSWORD': os.environ['PASSWORD'],
-        'HOST': 'db.bit.io',
-        'PORT': '5432',
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': 'Projects',
+    'USER': os.environ['USER'],
+    'PASSWORD': os.environ['PASSWORD'],
+    'HOST': 'ep-rough-cell-08434715.us-east-1.aws.neon.tech',
+    'PORT': '5432',
+    'OPTIONS': {'sslmode': 'require'},
+  }
 }
 
 
